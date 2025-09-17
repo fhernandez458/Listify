@@ -5,12 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.fhzapps.listify.data.ListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,18 +28,18 @@ class ListViewModel @Inject constructor() : ViewModel() {
     }
 
     fun removeItem(item: ListItem) {
+        Log.d("ListViewModel", "item size: ${_listItems.size}")
         _listItems.remove(item)
     }
 
     fun toggleItem(item: ListItem) {
         val index = _listItems.indexOf(item)
         _listItems[index] = _listItems[index].copy(isChecked = !_listItems[index].isChecked)
-//        Log.d("ListViewModel", "Item toggled: ${_listItems[index]}, toggleState = ${_listItems[index].isChecked}")
     }
 
-    fun updateItem(item: ListItem) {
-        val index = _listItems.indexOf(item)
-        _listItems[index] = item
+    fun updateItem(oldItem: ListItem, newItem: ListItem) {
+        val index = _listItems.indexOf(oldItem)
+        _listItems[index] = newItem
     }
 
     fun getCheckedItems(): List<ListItem> {

@@ -1,5 +1,6 @@
 package com.fhzapps.listify.presentation
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,6 +13,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.unit.dp
@@ -71,8 +73,8 @@ fun UpdateItemDialog(
     viewModel: ListViewModel = viewModel(),
     onDismiss: () -> Unit
 ) {
-    var name by rememberSaveable { mutableStateOf(item.name) }
-    var description by rememberSaveable { mutableStateOf(item.description) }
+    var name by remember { mutableStateOf(item.name) }
+    var description by remember { mutableStateOf(item.description) }
     Dialog(
         onDismissRequest = { onDismiss.invoke() },
         properties = DialogProperties(
@@ -81,23 +83,38 @@ fun UpdateItemDialog(
         )
     ) {
         Column {
-            TextField(value = name, onValueChange = { name = it })
-            TextField(value = description, onValueChange = { description = it })
-            Row {
+            TextField(
+                value = name,
+                onValueChange = { name = it },
+                shape = RoundedCornerShape(2.dp),
+                label = { Text("Item Name") })
+
+            TextField(
+                value = description,
+                onValueChange = { description = it },
+                shape = RoundedCornerShape(2.dp),
+                label = { Text("Item Description") })
+
+            Row (horizontalArrangement = Arrangement.SpaceEvenly){
                 TextButton(
                     colors = goodButton(),
                     onClick = {
-                        viewModel.updateItem(ListItem(name, description, item.isChecked))
+                        viewModel.updateItem(item, ListItem(name, description, item.isChecked))
                         onDismiss.invoke()
-                    }) {
+                    },
+                    shape = RoundedCornerShape(2.dp)
+                ) {
                     Text("Update Item")
                 }
+                
                 TextButton(
                     colors = badButton(),
+                    shape = RoundedCornerShape(2.dp),
                     onClick = {
                         viewModel.removeItem(item)
                         onDismiss.invoke()
-                    }) {
+                    }
+                ) {
                     Text("Delete Item")
                 }
             }
