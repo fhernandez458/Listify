@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.fhzapps.listify.data.ListItem
+import com.fhzapps.listify.domain.ListItem
 import com.fhzapps.listify.domain.ListViewModel
 import com.fhzapps.listify.ui.theme.badButton
 import com.fhzapps.listify.ui.theme.goodButton
@@ -57,7 +57,7 @@ fun AddItemDialog(
             )
             TextButton(
                 onClick = {
-                    viewModel.addItem(ListItem(name, description, false))
+                    viewModel.addItem(ListItem(name = name, description = description, isChecked = false))
                     onDismiss.invoke()
                 }
             ) {
@@ -99,14 +99,14 @@ fun UpdateItemDialog(
                 TextButton(
                     colors = goodButton(),
                     onClick = {
-                        viewModel.updateItem(item, ListItem(name, description, item.isChecked))
+                        viewModel.updateItem(item, ListItem(name = name, description = description, isChecked = item.isChecked))
                         onDismiss.invoke()
                     },
                     shape = RoundedCornerShape(2.dp)
                 ) {
                     Text("Update Item")
                 }
-                
+
                 TextButton(
                     colors = badButton(),
                     shape = RoundedCornerShape(2.dp),

@@ -26,9 +26,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
-import com.fhzapps.listify.data.ListItem
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.fhzapps.listify.domain.ListItem
 import com.fhzapps.listify.domain.ListViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.HiltAndroidApp
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var listViewModel: ListViewModel
 

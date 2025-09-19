@@ -22,7 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.fhzapps.listify.data.ListItem
+import com.fhzapps.listify.domain.ListItem
 import com.fhzapps.listify.domain.ListViewModel
 
 @Composable

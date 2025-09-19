@@ -1,6 +1,6 @@
 package com.fhzapps.listify.domain
 
-import com.fhzapps.listify.data.ListItem
+import com.fhzapps.listify.domain.ListItem
 
 data class ListViewUiState (
     val listItems: List<ListItem> = emptyList(),
