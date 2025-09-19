@@ -35,6 +35,7 @@ fun ShowListPage(
     val showDialog = remember { mutableStateOf(false) }
     val checkedItems = viewModel.getCheckedItems().collectAsState(listOf())
     val uncheckedItems = viewModel.getUncheckedItems().collectAsState(listOf())
+    val itemCount = viewModel.itemCount().collectAsState(0)
 
     Scaffold(
         modifier = Modifier.fillMaxSize()
@@ -57,11 +58,11 @@ fun ShowListPage(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
 
-            if (viewModel.itemCount() <= 0) {
+            if (itemCount.value <= 0) {
                 Text("Add some Items!", fontSize = 24.sp)
 
             }
-            if (viewModel.itemCount() > 0) {
+            if (itemCount.value > 0) {
 
                 LazyColumn { // when things are NOT crossed off, they go here to the top.
                     items(

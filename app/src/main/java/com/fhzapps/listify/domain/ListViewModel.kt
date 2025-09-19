@@ -1,13 +1,12 @@
 package com.fhzapps.listify.domain
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fhzapps.listify.data.ListDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,32 +15,18 @@ class ListViewModel @Inject constructor(
     private var dao: ListDao
 
 ) : ViewModel() {
-    private val _listItems = mutableStateListOf<ListItem>()
-    
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            dao.getAllItems().collect {
-                _listItems.clear()
-                _listItems.addAll(it)
-            }
-        }
-    }
-
     @Synchronized
     fun addItem(item: ListItem) {
-        _listItems.add(item)
         viewModelScope.launch(Dispatchers.IO) {
             dao.upsertListItem(item)
         }
-        Log.d("ListViewModel", "Item added: $item")
     }
 
-    fun itemCount(): Int {
-        return _listItems.size
+    fun itemCount(): Flow<Int> {
+        return dao.getAllItems().map { it.size }
     }
 
     fun removeItem(item: ListItem) {
-        Log.d("ListViewModel", "item size: ${_listItems.size}")
         viewModelScope.launch(Dispatchers.IO) {
             dao.deleteListItem(item)
         }
@@ -49,16 +34,14 @@ class ListViewModel @Inject constructor(
 
 
     fun toggleItem(item: ListItem) {
-//        _listItems[index] = _listItems[index].copy(isChecked = !_listItems[index].isChecked)
         viewModelScope.launch(Dispatchers.IO) {
             dao.updateListItem(item.copy(isChecked = !item.isChecked))
         }
     }
 
     fun updateItem(oldItem: ListItem, newItem: ListItem) {
-
         viewModelScope.launch(Dispatchers.IO) {
-            dao.updateListItem(newItem)
+            dao.updateListItem(oldItem.copy(name = newItem.name, description = newItem.description))
         }
     }
 
@@ -68,6 +51,6 @@ class ListViewModel @Inject constructor(
 
     fun getUncheckedItems(): Flow<List<ListItem>> {
        return dao.getUncheckedItems()
-
     }
+
 }
