@@ -1,5 +1,6 @@
 package com.fhzapps.listify.domain
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.fhzapps.listify.data.ListDao
@@ -15,6 +16,8 @@ class ListViewModel @Inject constructor(
     private var dao: ListDao
 
 ) : ViewModel() {
+
+    val selectedPage =  mutableStateOf<ScreenType>(ScreenType.ListPage)
     @Synchronized
     fun addItem(item: ListItem) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -51,6 +54,10 @@ class ListViewModel @Inject constructor(
 
     fun getUncheckedItems(): Flow<List<ListItem>> {
        return dao.getUncheckedItems()
+    }
+
+    fun setScreen(screen: ScreenType) {
+        selectedPage.value = screen
     }
 
 }
